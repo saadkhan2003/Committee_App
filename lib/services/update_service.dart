@@ -7,10 +7,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/app_theme.dart';
 
 class UpdateService {
-  // TODO: Replace with your actual URL where version.json is hosted
-  // You can host this on Firebase Hosting, GitHub, or any web server
+  // GitHub Releases URL for version.json
   static const String _versionCheckUrl = 
-      'https://your-server.com/committee-app/version.json';
+      'https://github.com/saadkhan2003/Committee_app_personal/releases/latest/download/version.json';
   
   // version.json format:
   // {
