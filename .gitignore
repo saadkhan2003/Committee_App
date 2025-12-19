@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+.packages
 
 # Symbolication related
 app.*.symbols
@@ -43,3 +44,21 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.gradle/
+/android/local.properties
+/android/app/*.keystore
+/android/key.properties
+
+# iOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/Generated.xcconfig
+
+# Build outputs
+*.apk
+*.aab
+
+# Firebase sensitive files (keep your own copies safe)
+# google-services.json
+# GoogleService-Info.plist
