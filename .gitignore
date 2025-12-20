@@ -56,11 +56,12 @@ app.*.map.json
 **/ios/Flutter/Generated.xcconfig
 
 # Build outputs
-*.apk
 *.aab
+build/
 
 # Firebase sensitive files (keep your own copies safe)
 # google-services.json
 # GoogleService-Info.plist
-# netlify.toml
 
+# Keep version.json tracked for OTA updates
+# !version.json

@@ -10,7 +10,7 @@ import '../utils/app_theme.dart';
 class UpdateService {
   // GitHub Releases URL for version.json
   static const String _versionCheckUrl = 
-      'https://github.com/saadkhan2003/Committee_app_personal/releases/latest/download/version.json';
+      'https://raw.githubusercontent.com/saadkhan2003/Committee_app_personal/main/version.json';
   
   static Future<void> checkForUpdate(BuildContext context) async {
     // Only check on Android (not web)
@@ -106,7 +106,7 @@ class UpdateService {
           ElevatedButton.icon(
             onPressed: () {
               Navigator.pop(context);
-              _downloadAndInstall(context, apkUrl);
+              _showDownloadProgress(context, apkUrl);
             },
             icon: const Icon(Icons.download_rounded, size: 18),
             label: const Text('Update Now'),
@@ -116,57 +116,15 @@ class UpdateService {
     );
   }
 
-  static void _downloadAndInstall(BuildContext context, String apkUrl) {
+  static void _showDownloadProgress(BuildContext context, String apkUrl) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppTheme.darkCard,
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text(
-              'Downloading update...',
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Please wait, the installer will open automatically.',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+      builder: (dialogContext) => _DownloadProgressDialog(
+        apkUrl: apkUrl,
+        onError: (error) => _showFallbackDialog(context, apkUrl, error),
       ),
     );
-
-    try {
-      OtaUpdate().execute(apkUrl).listen(
-        (event) {
-          debugPrint('OTA Status: ${event.status}, Value: ${event.value}');
-          if (event.status == OtaStatus.INSTALLING) {
-            try {
-              Navigator.of(context, rootNavigator: true).pop();
-            } catch (_) {}
-          }
-        },
-        onError: (e) {
-          debugPrint('OTA Error: $e');
-          try {
-            Navigator.of(context, rootNavigator: true).pop();
-          } catch (_) {}
-          _showFallbackDialog(context, apkUrl, e.toString());
-        },
-      );
-    } catch (e) {
-      debugPrint('OTA Exception: $e');
-      try {
-        Navigator.of(context, rootNavigator: true).pop();
-      } catch (_) {}
-      _showFallbackDialog(context, apkUrl, e.toString());
-    }
   }
 
   static void _showFallbackDialog(BuildContext context, String apkUrl, String error) {
@@ -208,6 +166,126 @@ class UpdateService {
             },
             icon: const Icon(Icons.open_in_browser, size: 18),
             label: const Text('Download'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Stateful widget for download progress
+class _DownloadProgressDialog extends StatefulWidget {
+  final String apkUrl;
+  final Function(String) onError;
+
+  const _DownloadProgressDialog({required this.apkUrl, required this.onError});
+
+  @override
+  State<_DownloadProgressDialog> createState() => _DownloadProgressDialogState();
+}
+
+class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
+  double _progress = 0.0;
+  String _status = 'Starting download...';
+
+  @override
+  void initState() {
+    super.initState();
+    _startDownload();
+  }
+
+  void _startDownload() {
+    try {
+      OtaUpdate().execute(widget.apkUrl).listen(
+        (event) {
+          debugPrint('OTA Status: ${event.status}, Value: ${event.value}');
+          
+          if (!mounted) return;
+          
+          switch (event.status) {
+            case OtaStatus.DOWNLOADING:
+              final progress = double.tryParse(event.value ?? '0') ?? 0;
+              setState(() {
+                _progress = progress / 100;
+                _status = 'Downloading... ${progress.toInt()}%';
+              });
+              break;
+            case OtaStatus.INSTALLING:
+              setState(() {
+                _progress = 1.0;
+                _status = 'Installing...';
+              });
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (mounted) Navigator.of(context).pop();
+              });
+              break;
+            case OtaStatus.DOWNLOAD_ERROR:
+              Navigator.of(context).pop();
+              widget.onError(event.value ?? 'Download failed');
+              break;
+            default:
+              break;
+          }
+        },
+        onError: (e) {
+          debugPrint('OTA Error: $e');
+          if (mounted) {
+            Navigator.of(context).pop();
+            widget.onError(e.toString());
+          }
+        },
+      );
+    } catch (e) {
+      debugPrint('OTA Exception: $e');
+      if (mounted) {
+        Navigator.of(context).pop();
+        widget.onError(e.toString());
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppTheme.darkCard,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.download_rounded,
+            size: 48,
+            color: AppTheme.primaryColor,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            _status,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: _progress > 0 ? _progress : null,
+              backgroundColor: Colors.grey[800],
+              valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+              minHeight: 8,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _progress > 0 ? '${(_progress * 100).toInt()}%' : 'Please wait...',
+            style: TextStyle(color: Colors.grey[400], fontSize: 12),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'The installer will open automatically',
+            style: TextStyle(color: Colors.grey[600], fontSize: 11),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
