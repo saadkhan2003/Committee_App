@@ -129,8 +129,29 @@ class SyncService {
       final cloudMember = Member.fromJson(doc.data());
       final localMember = _dbService.getMemberById(cloudMember.id);
 
-      if (localMember == null ||
-          cloudMember.createdAt.isAfter(localMember.createdAt)) {
+      // Check if cloud is newer - compare payoutDate for payout changes
+      bool shouldDownload = false;
+      
+      if (localMember == null) {
+        shouldDownload = true;
+      } else {
+        // Compare payoutDate for payout status changes
+        if (cloudMember.payoutDate != null && localMember.payoutDate != null) {
+          shouldDownload = cloudMember.payoutDate!.isAfter(localMember.payoutDate!);
+        } else if (cloudMember.payoutDate != null && localMember.payoutDate == null) {
+          // Cloud has payout, local doesn't - cloud is newer
+          shouldDownload = true;
+        } else if (cloudMember.payoutDate == null && localMember.payoutDate != null) {
+          // Cloud was reverted, local has payout - check createdAt as fallback
+          // Don't download - local change is probably being uploaded
+          shouldDownload = false;
+        } else if (cloudMember.hasReceivedPayout != localMember.hasReceivedPayout) {
+          // Payout status differs - prefer cloud if no date to compare
+          shouldDownload = cloudMember.hasReceivedPayout;
+        }
+      }
+
+      if (shouldDownload) {
         await _dbService.saveMember(cloudMember);
         downloaded++;
       }
