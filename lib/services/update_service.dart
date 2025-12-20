@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ota_update/ota_update.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../utils/app_theme.dart';
 
 class UpdateService {
@@ -11,13 +12,6 @@ class UpdateService {
   static const String _versionCheckUrl = 
       'https://github.com/saadkhan2003/Committee_app_personal/releases/latest/download/version.json';
   
-  // version.json format:
-  // {
-  //   "version": "1.0.1",
-  //   "apkUrl": "https://your-server.com/committee-app/app-release.apk",
-  //   "releaseNotes": "Bug fixes and improvements"
-  // }
-
   static Future<void> checkForUpdate(BuildContext context) async {
     // Only check on Android (not web)
     if (kIsWeb) return;
@@ -42,7 +36,6 @@ class UpdateService {
         }
       }
     } catch (e) {
-      // Silently fail - don't interrupt user if update check fails
       debugPrint('Update check failed: $e');
     }
   }
@@ -124,27 +117,27 @@ class UpdateService {
   }
 
   static void _downloadAndInstall(BuildContext context, String apkUrl) {
-    double progress = 0;
-    
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          backgroundColor: AppTheme.darkCard,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              Text(
-                'Downloading update... ${(progress * 100).toInt()}%',
-                style: const TextStyle(color: Colors.white),
-              ),
-              const SizedBox(height: 8),
-              LinearProgressIndicator(value: progress),
-            ],
-          ),
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppTheme.darkCard,
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text(
+              'Downloading update...',
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Please wait, the installer will open automatically.',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
@@ -152,36 +145,72 @@ class UpdateService {
     try {
       OtaUpdate().execute(apkUrl).listen(
         (event) {
-          if (event.status == OtaStatus.DOWNLOADING) {
-            // Update progress (this is a simplified approach)
-            debugPrint('Download progress: ${event.value}%');
-          } else if (event.status == OtaStatus.INSTALLING) {
-            // APK is being installed
-            debugPrint('Installing...');
+          debugPrint('OTA Status: ${event.status}, Value: ${event.value}');
+          if (event.status == OtaStatus.INSTALLING) {
+            if (context.mounted) {
+              Navigator.of(context, rootNavigator: true).pop();
+            }
           }
         },
         onError: (e) {
+          debugPrint('OTA Error: $e');
           if (context.mounted) {
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Update failed: $e'),
-                backgroundColor: AppTheme.errorColor,
-              ),
-            );
+            Navigator.of(context, rootNavigator: true).pop();
+            _showFallbackDialog(context, apkUrl, e.toString());
           }
         },
       );
     } catch (e) {
+      debugPrint('OTA Exception: $e');
       if (context.mounted) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Update failed: $e'),
-            backgroundColor: AppTheme.errorColor,
-          ),
-        );
+        Navigator.of(context, rootNavigator: true).pop();
+        _showFallbackDialog(context, apkUrl, e.toString());
       }
     }
+  }
+
+  static void _showFallbackDialog(BuildContext context, String apkUrl, String error) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppTheme.darkCard,
+        title: const Text('Download Manually', style: TextStyle(color: Colors.white)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.download_rounded, size: 48, color: AppTheme.primaryColor),
+            const SizedBox(height: 16),
+            const Text(
+              'Auto-update failed. Please download and install the update manually.',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Error: $error',
+              style: TextStyle(color: Colors.grey[600], fontSize: 10),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              Navigator.pop(context);
+              final uri = Uri.parse(apkUrl);
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
+              }
+            },
+            icon: const Icon(Icons.open_in_browser, size: 18),
+            label: const Text('Download'),
+          ),
+        ],
+      ),
+    );
   }
 }

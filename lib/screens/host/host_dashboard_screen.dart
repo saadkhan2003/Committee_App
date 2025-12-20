@@ -333,20 +333,6 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
         title: const Text('My Committees'),
         automaticallyImplyLeading: false,
         actions: [
-          // Refresh Icon
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Sync Data',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Syncing data...'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
-              _syncData();
-            },
-          ),
           // Profile Icon
           IconButton(
             icon: const Icon(Icons.person_outline),
