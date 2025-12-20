@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../services/auth_service.dart';
 import '../../services/database_service.dart';
 import '../../services/sync_service.dart';
 import '../../utils/app_theme.dart';
 import '../home_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = 'v${packageInfo.version}';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +205,7 @@ class ProfileScreen extends StatelessWidget {
 
             // App Version
             Text(
-              'Committee App v1.0.0',
+              'Committee App ${_appVersion.isEmpty ? "" : _appVersion}',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey[600],

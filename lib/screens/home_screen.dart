@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/app_theme.dart';
 import 'auth/login_screen.dart';
 import 'viewer/join_committee_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    if (mounted) {
+      setState(() {
+        _appVersion = 'v${packageInfo.version}';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +101,25 @@ class HomeScreen extends StatelessWidget {
                             color: Colors.grey[400],
                           ),
                         ),
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 12),
+                        // Version badge - dynamic
+                        if (_appVersion.isNotEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryColor.withAlpha(30),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              _appVersion,
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: 48),
                         // View Committees Button
                         SizedBox(
                           width: double.infinity,

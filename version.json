@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
-  "apkUrl": "https://github.com/saadkhan2003/Committee_app_personal/releases/download/v1.0.0/app-release.apk",
-  "releaseNotes": "Initial release"
+  "version": "1.0.1",
+  "apkUrl": "https://github.com/saadkhan2003/Committee_app_personal/releases/download/v1.0.1/app-release.apk",
+  "releaseNotes": "New features: Enter key submits login form, improved UI"
 }
