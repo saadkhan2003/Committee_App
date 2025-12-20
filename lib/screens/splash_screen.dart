@@ -54,8 +54,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       final authService = AuthService();
       final user = authService.currentUser;
       
-      // Step 3: Sync if logged in (silently in background)
-      if (user != null) {
+      // Step 3: Sync if logged in AND is a real host (not anonymous)
+      final isRealHost = user != null && !user.isAnonymous && user.email != null;
+      
+      if (isRealHost) {
+        setState(() => _status = 'Syncing data...');
         try {
           final syncService = SyncService();
           await syncService.syncAll(user.uid).timeout(
@@ -76,11 +79,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       await Future.delayed(const Duration(milliseconds: 500));
       
       if (mounted) {
-        // Navigate to appropriate screen
+        // Navigate: Real hosts go to Dashboard, everyone else (including anonymous) goes to HomeScreen
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
-                user != null ? const HostDashboardScreen() : const HomeScreen(),
+                isRealHost ? const HostDashboardScreen() : const HomeScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
@@ -88,8 +91,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         );
         
-        // Check for updates after navigation (only for logged-in hosts)
-        if (user != null) {
+        // Check for updates after navigation (for real hosts only)
+        if (isRealHost) {
           Future.delayed(const Duration(seconds: 2), () {
             if (mounted) {
               UpdateService.checkForUpdate(context);

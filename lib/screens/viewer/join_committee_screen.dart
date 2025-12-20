@@ -390,10 +390,29 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                 TextFormField(
                   controller: _memberCodeController,
                   textCapitalization: TextCapitalization.characters,
+                  onChanged: (value) {
+                    // Auto-add dash after 3 letters
+                    final upper = value.toUpperCase();
+                    if (upper.length == 3 && !upper.contains('-')) {
+                      // If exactly 3 letters and no dash, add dash
+                      _memberCodeController.text = '$upper-';
+                      _memberCodeController.selection = TextSelection.fromPosition(
+                        TextPosition(offset: _memberCodeController.text.length),
+                      );
+                    } else if (upper.length > 4 && !upper.contains('-')) {
+                      // If typed more than 3 without dash, insert it
+                      final letters = upper.substring(0, 3);
+                      final numbers = upper.substring(3);
+                      _memberCodeController.text = '$letters-$numbers';
+                      _memberCodeController.selection = TextSelection.fromPosition(
+                        TextPosition(offset: _memberCodeController.text.length),
+                      );
+                    }
+                  },
                   decoration: const InputDecoration(
                     labelText: 'Your Member Code',
                     prefixIcon: Icon(Icons.person_outline),
-                    hintText: 'e.g., ALI-4829',
+                    hintText: 'e.g., ABD-1577',
                   ),
                   style: GoogleFonts.inter(fontSize: 18, letterSpacing: 1),
                 ),
