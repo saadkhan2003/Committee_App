@@ -222,6 +222,35 @@ class SyncService {
       return false;
     }
   }
+
+  /// Delete a single member from Firestore
+  Future<bool> deleteMemberFromCloud(String memberId) async {
+    if (!await isOnline()) return false;
+
+    try {
+      await _firestore
+          .collection(membersCollection)
+          .doc(memberId)
+          .delete();
+
+      // Also delete related payments for this member
+      final paymentsSnapshot =
+          await _firestore
+              .collection(paymentsCollection)
+              .where('memberId', isEqualTo: memberId)
+              .get();
+      for (final doc in paymentsSnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      print('Successfully deleted member $memberId from cloud');
+      return true;
+    } catch (e) {
+      print('Error deleting member from cloud: $e');
+      return false;
+    }
+  }
+
   // ============ VIEWER SYNC ============
 
   Future<Committee?> syncCommitteeByCode(String code) async {

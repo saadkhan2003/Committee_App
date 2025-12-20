@@ -390,7 +390,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome, $displayName!',
+                    '${_authService.currentUser?.displayName}!',
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

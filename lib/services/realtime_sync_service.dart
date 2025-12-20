@@ -21,11 +21,54 @@ class RealtimeSyncService {
   final Map<String, StreamSubscription<QuerySnapshot>> _membersSubscriptions = {};
   final Map<String, StreamSubscription<QuerySnapshot>> _paymentsSubscriptions = {};
 
+  // Track pending deletes to prevent re-syncing deleted items
+  final Set<String> _pendingCommitteeDeletes = {};
+  final Set<String> _pendingMemberDeletes = {};
+  final Set<String> _pendingPaymentUpdates = {};  // For payment toggles and reverts
+
   // Callback for UI updates
   VoidCallback? onDataChanged;
 
   bool _isListening = false;
   String? _currentHostId;
+
+  /// Mark a committee as pending delete (call before deleting)
+  void markCommitteeForDelete(String committeeId) {
+    _pendingCommitteeDeletes.add(committeeId);
+    // Auto-clear after 10 seconds (in case cloud delete fails)
+    Future.delayed(const Duration(seconds: 10), () {
+      _pendingCommitteeDeletes.remove(committeeId);
+    });
+  }
+
+  /// Mark a member as pending delete
+  void markMemberForDelete(String memberId) {
+    _pendingMemberDeletes.add(memberId);
+    Future.delayed(const Duration(seconds: 10), () {
+      _pendingMemberDeletes.remove(memberId);
+    });
+  }
+
+  /// Mark a member as pending update (for payout revert and edits)
+  void markMemberForUpdate(String memberId) {
+    _pendingMemberDeletes.add(memberId); // Reuse the same set to skip sync
+    Future.delayed(const Duration(seconds: 10), () {
+      _pendingMemberDeletes.remove(memberId);
+    });
+  }
+
+  /// Mark a payment as pending update (for toggles and reverts)
+  void markPaymentForUpdate(String paymentId) {
+    _pendingPaymentUpdates.add(paymentId);
+    Future.delayed(const Duration(seconds: 10), () {
+      _pendingPaymentUpdates.remove(paymentId);
+    });
+  }
+
+  /// Check if payment is pending update
+  bool isPaymentPendingUpdate(String paymentId) {
+    return _pendingPaymentUpdates.contains(paymentId);
+  }
 
   /// Start listening to real-time updates for a host
   void startListening(String hostId) {
@@ -60,8 +103,16 @@ class RealtimeSyncService {
       final data = change.doc.data() as Map<String, dynamic>?;
       if (data == null) continue;
 
+      final committeeId = change.doc.id;
+
+      // Skip if this committee is pending delete locally
+      if (_pendingCommitteeDeletes.contains(committeeId)) {
+        debugPrint('⏳ Skipping committee $committeeId (pending delete)');
+        continue;
+      }
+
       final committee = Committee(
-        id: change.doc.id,
+        id: committeeId,
         code: data['code'] ?? '',
         name: data['name'] ?? '',
         hostId: data['hostId'] ?? '',
@@ -80,6 +131,7 @@ class RealtimeSyncService {
         // Committee was deleted on another device
         await _dbService.deleteCommittee(committee.id);
         _stopListeningToCommitteeData(committee.id);
+        _pendingCommitteeDeletes.remove(committeeId); // Clear pending if cloud deleted
         debugPrint('🗑️ Committee deleted: ${committee.name}');
       } else {
         // Committee was added or modified
@@ -126,8 +178,16 @@ class RealtimeSyncService {
       final data = change.doc.data() as Map<String, dynamic>?;
       if (data == null) continue;
 
+      final memberId = change.doc.id;
+
+      // Skip if pending delete
+      if (_pendingMemberDeletes.contains(memberId)) {
+        debugPrint('⏳ Skipping member $memberId (pending delete)');
+        continue;
+      }
+
       final member = Member(
-        id: change.doc.id,
+        id: memberId,
         committeeId: data['committeeId'] ?? '',
         memberCode: data['memberCode'] ?? '',
         name: data['name'] ?? '',
@@ -140,6 +200,7 @@ class RealtimeSyncService {
 
       if (change.type == DocumentChangeType.removed) {
         await _dbService.deleteMember(member.id);
+        _pendingMemberDeletes.remove(memberId);
         debugPrint('🗑️ Member deleted: ${member.name}');
       } else {
         await _dbService.saveMember(member);
@@ -156,8 +217,16 @@ class RealtimeSyncService {
       final data = change.doc.data() as Map<String, dynamic>?;
       if (data == null) continue;
 
+      final paymentId = change.doc.id;
+
+      // Skip if pending update locally
+      if (_pendingPaymentUpdates.contains(paymentId)) {
+        debugPrint('⏳ Skipping payment $paymentId (pending update)');
+        continue;
+      }
+
       final payment = Payment(
-        id: change.doc.id,
+        id: paymentId,
         memberId: data['memberId'] ?? '',
         committeeId: data['committeeId'] ?? '',
         date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -168,6 +237,7 @@ class RealtimeSyncService {
 
       if (change.type == DocumentChangeType.removed) {
         await _dbService.deletePayment(payment.id);
+        _pendingPaymentUpdates.remove(paymentId);
       } else {
         await _dbService.savePayment(payment);
       }
