@@ -129,25 +129,36 @@ class SyncService {
       final cloudMember = Member.fromJson(doc.data());
       final localMember = _dbService.getMemberById(cloudMember.id);
 
-      // Check if cloud is newer - compare payoutDate for payout changes
+      // Check if cloud is newer - compare payout status
       bool shouldDownload = false;
       
       if (localMember == null) {
         shouldDownload = true;
       } else {
-        // Compare payoutDate for payout status changes
-        if (cloudMember.payoutDate != null && localMember.payoutDate != null) {
-          shouldDownload = cloudMember.payoutDate!.isAfter(localMember.payoutDate!);
-        } else if (cloudMember.payoutDate != null && localMember.payoutDate == null) {
-          // Cloud has payout, local doesn't - cloud is newer
+        // Compare payout status
+        if (cloudMember.hasReceivedPayout != localMember.hasReceivedPayout) {
+          // Payout status differs - use timestamps to decide
+          if (cloudMember.payoutDate != null && localMember.payoutDate != null) {
+            // Both have dates - take newer
+            shouldDownload = cloudMember.payoutDate!.isAfter(localMember.payoutDate!);
+          } else if (cloudMember.payoutDate != null && localMember.payoutDate == null) {
+            // Cloud has payout, local doesn't - cloud marked payout
+            shouldDownload = true;
+          } else if (cloudMember.payoutDate == null && localMember.payoutDate != null) {
+            // Cloud was REVERTED - download the reverted state
+            shouldDownload = true;
+          } else {
+            // Both null - compare hasReceivedPayout directly
+            shouldDownload = cloudMember.hasReceivedPayout != localMember.hasReceivedPayout;
+          }
+        }
+        // Also check for payoutOrder changes
+        if (cloudMember.payoutOrder != localMember.payoutOrder) {
           shouldDownload = true;
-        } else if (cloudMember.payoutDate == null && localMember.payoutDate != null) {
-          // Cloud was reverted, local has payout - check createdAt as fallback
-          // Don't download - local change is probably being uploaded
-          shouldDownload = false;
-        } else if (cloudMember.hasReceivedPayout != localMember.hasReceivedPayout) {
-          // Payout status differs - prefer cloud if no date to compare
-          shouldDownload = cloudMember.hasReceivedPayout;
+        }
+        // Also check for name/phone changes
+        if (cloudMember.name != localMember.name || cloudMember.phone != localMember.phone) {
+          shouldDownload = true;
         }
       }
 
