@@ -91,7 +91,3 @@ lib/
 ## License
 
 This project is private.
-
-## Version
-
-Current version: **1.0.3**
