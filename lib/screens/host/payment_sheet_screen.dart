@@ -10,6 +10,7 @@ import '../../services/export_service.dart';
 import '../../services/auto_sync_service.dart';
 import '../../services/sync_service.dart';
 import '../../services/update_service.dart';
+import '../../services/analytics_service.dart';
 import '../../models/committee.dart';
 import '../../models/member.dart';
 import '../../utils/app_theme.dart';
@@ -417,6 +418,13 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
         widget.committee.id,
         date,
         hostId,
+      );
+      
+      // Log analytics event
+      final newStatus = _paymentGrid[memberId]?[_getDateKey(date)] ?? false;
+      AnalyticsService.logPaymentMarked(
+        amount: widget.committee.contributionAmount,
+        isPaid: newStatus,
       );
 
       // Reload to ensure sync

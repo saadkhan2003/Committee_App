@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../services/auth_service.dart';
 import '../../services/database_service.dart';
 import '../../services/sync_service.dart';
+import '../../services/analytics_service.dart';
 import '../../models/committee.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/code_generator.dart';
@@ -98,6 +99,13 @@ class _CreateCommitteeScreenState extends State<CreateCommitteeScreen> {
       );
 
       await _dbService.saveCommittee(committee);
+      
+      // Log analytics event
+      AnalyticsService.logCommitteeCreated(
+        committeeName: committee.name,
+        memberCount: 0,
+        contributionAmount: committee.contributionAmount,
+      );
       
       // Auto-sync to cloud immediately
       await _syncService.syncCommittees(committee.hostId);

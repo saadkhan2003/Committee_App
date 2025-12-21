@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/auth_service.dart';
+import '../../services/analytics_service.dart';
 import '../../utils/app_theme.dart';
 import '../host/host_dashboard_screen.dart';
 
@@ -53,12 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
+        AnalyticsService.logLogin();
       } else {
         await _authService.signUp(
           email: _emailController.text.trim(),
           password: _passwordController.text,
           displayName: _nameController.text.trim(),
         );
+        AnalyticsService.logSignUp();
       }
 
       if (mounted) {
@@ -101,9 +104,19 @@ class _LoginScreenState extends State<LoginScreen> {
             TextFormField(
               controller: resetEmailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Email',
-                prefixIcon: Icon(Icons.email_outlined),
+                prefixIcon: const Icon(Icons.email_outlined),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[600]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
+                ),
+                filled: true,
+                fillColor: AppTheme.darkSurface,
               ),
             ),
           ],
