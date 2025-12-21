@@ -81,3 +81,8 @@ upload-keystore.jks
 
 # Local configuration
 local.properties
+
+# Firebase sensitive files (keep your own copies safe)
+google-services.json
+GoogleService-Info.plist
+
