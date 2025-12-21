@@ -34,13 +34,18 @@ class UpdateService {
       final latestVersion = versionData['version'] as String;
       final apkUrl = versionData['apkUrl'] as String;
       final releaseNotes = versionData['releaseNotes'] as String? ?? 'Bug fixes';
-      debugPrint('Update check: Latest version = $latestVersion');
+      final forceUpdate = versionData['forceUpdate'] as bool? ?? false;
+      final minVersion = versionData['minVersion'] as String? ?? '1.0.0';
+      debugPrint('Update check: Latest version = $latestVersion, forceUpdate = $forceUpdate');
+
+      // Check if force update is needed (current version is below minimum)
+      final isForced = forceUpdate || _isNewerVersion(currentVersion, minVersion);
 
       // Compare versions
       if (_isNewerVersion(currentVersion, latestVersion)) {
-        debugPrint('Update check: Update available! Showing dialog...');
+        debugPrint('Update check: Update available! Forced: $isForced');
         if (context.mounted) {
-          _showUpdateDialog(context, latestVersion, releaseNotes, apkUrl);
+          _showUpdateDialog(context, latestVersion, releaseNotes, apkUrl, isForced);
         }
       } else {
         debugPrint('Update check: Already up to date');
@@ -69,6 +74,7 @@ class UpdateService {
     String version,
     String releaseNotes,
     String apkUrl,
+    bool isForced,
   ) {
     showDialog(
       context: context,
@@ -109,17 +115,18 @@ class UpdateService {
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Later'),
-          ),
+          if (!isForced)
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Later'),
+            ),
           ElevatedButton.icon(
             onPressed: () {
               Navigator.pop(context);
               _showDownloadProgress(context, apkUrl);
             },
             icon: const Icon(Icons.download_rounded, size: 18),
-            label: const Text('Update Now'),
+            label: Text(isForced ? 'Update Required' : 'Update Now'),
           ),
         ],
       ),
