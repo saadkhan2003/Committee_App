@@ -63,3 +63,21 @@ build/
 
 # Keep version.json tracked for OTA updates
 !version.json
+
+# Signing keys (IMPORTANT - never commit these!)
+*.jks
+*.keystore
+key.properties
+upload-keystore.jks
+
+# Environment files
+.env
+.env.*
+*.env
+
+# APK and build artifacts
+*.apk
+*.aab
+
+# Local configuration
+local.properties
