@@ -16,6 +16,7 @@ import '../../models/committee.dart';
 import '../../models/member.dart';
 import '../../utils/app_theme.dart';
 import 'member_management_screen.dart';
+import '../viewer/member_dashboard_screen.dart';
 
 class PaymentSheetScreen extends StatefulWidget {
   final Committee committee;
@@ -1740,6 +1741,37 @@ class _MemberCalendarViewState extends State<_MemberCalendarView> {
                 const SizedBox(width: 16),
                 _buildLegendItem(Colors.orange, 'Pending'),
               ],
+            ),
+          ),
+
+          // More Details Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MemberDashboardScreen(
+                        committee: widget.committee,
+                        member: widget.member,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.dashboard_rounded),
+                label: const Text('More Details'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
