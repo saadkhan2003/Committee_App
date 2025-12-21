@@ -1735,18 +1735,18 @@ class _MemberCalendarViewState extends State<_MemberCalendarView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildLegendItem(Colors.green, 'Paid'),
+                _buildLegendPaid(),
                 const SizedBox(width: 16),
-                _buildLegendItem(Colors.blue, 'Advance'),
+                _buildLegendAdvance(),
                 const SizedBox(width: 16),
-                _buildLegendItem(Colors.orange, 'Pending'),
+                _buildLegendPending(),
               ],
             ),
           ),
 
           // More Details Button
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.fromLTRB(16, 8, 16, MediaQuery.of(context).padding.bottom + 16),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -1800,21 +1800,58 @@ class _MemberCalendarViewState extends State<_MemberCalendarView> {
     );
   }
 
-  Widget _buildLegendItem(Color color, String label) {
+  // Paid: Green check in rounded square
+  Widget _buildLegendPaid() {
     return Row(
       children: [
         Container(
           width: 16,
           height: 16,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.3),
+            color: Colors.green.withOpacity(0.3),
             borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: color),
+            border: Border.all(color: Colors.green),
           ),
-          child: Icon(Icons.check, size: 12, color: color),
+          child: const Icon(Icons.check, size: 12, color: Colors.green),
         ),
         const SizedBox(width: 8),
-        Text(label, style: TextStyle(color: Colors.grey[400])),
+        Text('Paid', style: TextStyle(color: Colors.grey[400])),
+      ],
+    );
+  }
+
+  // Advance: Blue check in rounded square
+  Widget _buildLegendAdvance() {
+    return Row(
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: Colors.blue.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: Colors.blue),
+          ),
+          child: const Icon(Icons.check, size: 12, color: Colors.blue),
+        ),
+        const SizedBox(width: 8),
+        Text('Advance', style: TextStyle(color: Colors.grey[400])),
+      ],
+    );
+  }
+
+  // Pending: Orange circle outline
+  Widget _buildLegendPending() {
+    return Row(
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          alignment: Alignment.center,
+          child: const Icon(Icons.circle_outlined, size: 14, color: Colors.orange),
+        ),
+        const SizedBox(width: 8),
+        Text('Pending', style: TextStyle(color: Colors.grey[400])),
       ],
     );
   }
