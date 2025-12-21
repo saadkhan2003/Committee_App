@@ -45,10 +45,18 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
       
+      - name: Read release notes from version.json
+        id: release_notes
+        run: |
+          NOTES=$(cat version.json | jq -r '.releaseNotes')
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
-          generate_release_notes: true
+          body: ${{ steps.release_notes.outputs.notes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
