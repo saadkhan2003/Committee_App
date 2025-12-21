@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 import '../../services/database_service.dart';
 import '../../services/auto_sync_service.dart';
+import '../../services/toast_service.dart';
 import '../../models/committee.dart';
 import '../../models/member.dart';
 import '../../utils/app_theme.dart';
@@ -222,14 +223,7 @@ class _MemberManagementScreenState extends State<MemberManagementScreen> {
 
   void _copyMemberCode(Member member) {
     Clipboard.setData(ClipboardData(text: member.memberCode));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Member code "${member.memberCode}" copied!'),
-        backgroundColor: AppTheme.secondaryColor,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+    ToastService.success(context, 'Member code "${member.memberCode}" copied!');
   }
 
   @override

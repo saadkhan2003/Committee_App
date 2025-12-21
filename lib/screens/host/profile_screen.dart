@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../services/auth_service.dart';
 import '../../services/database_service.dart';
 import '../../services/sync_service.dart';
+import '../../services/toast_service.dart';
 import '../../utils/app_theme.dart';
 import '../home_screen.dart';
 
@@ -342,20 +343,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 await authService.resetPassword(user.email!);
                 if (mounted) {
                   Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Password reset email sent to ${user.email}'),
-                      backgroundColor: AppTheme.secondaryColor,
-                    ),
-                  );
+                  ToastService.success(context, 'Password reset email sent to ${user.email}');
                 }
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(e.toString()),
-                    backgroundColor: AppTheme.errorColor,
-                  ),
-                );
+                ToastService.error(context, e.toString());
               }
             },
             child: const Text('Send Reset Email'),
@@ -458,12 +449,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () async {
               final password = passwordController.text.trim();
               if (password.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Please enter your password'),
-                    backgroundColor: Colors.orange,
-                  ),
-                );
+                ToastService.warning(context, 'Please enter your password');
                 return;
               }
 
@@ -526,12 +512,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   } else if (errorStr.contains('network')) {
                     errorMsg = 'Network error. Check your connection.';
                   }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(errorMsg),
-                      backgroundColor: AppTheme.errorColor,
-                    ),
-                  );
+                  ToastService.error(context, errorMsg);
                 }
               }
             },

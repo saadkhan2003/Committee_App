@@ -11,6 +11,7 @@ import '../../services/auto_sync_service.dart';
 import '../../services/sync_service.dart';
 import '../../services/update_service.dart';
 import '../../services/analytics_service.dart';
+import '../../services/toast_service.dart';
 import '../../models/committee.dart';
 import '../../models/member.dart';
 import '../../utils/app_theme.dart';
@@ -393,13 +394,7 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
     final currentUser = _authService.currentUser;
     if (currentUser?.uid != widget.committee.hostId) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Only the host can mark payments'),
-          backgroundColor: Colors.grey,
-          duration: Duration(seconds: 1),
-        ),
-      );
+      ToastService.warning(context, 'Only the host can mark payments');
       return;
     }
 
@@ -436,9 +431,7 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
       // Revert on error
       if (mounted) {
         _loadPayments(); // Reload from DB to revert
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Update failed: $e')));
+        ToastService.error(context, 'Update failed: $e');
       }
     }
   }
@@ -583,9 +576,7 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
                   ),
                   onTap: () async {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Generating PDF...')),
-                    );
+                    ToastService.info(context, 'Generating PDF...');
                     await _exportService.exportToPdf(
                       widget.committee,
                       startDate: _filterStartDate,
@@ -612,9 +603,7 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
                   ),
                   onTap: () async {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Generating CSV...')),
-                    );
+                    ToastService.info(context, 'Generating CSV...');
                     await _exportService.exportToCsv(
                       widget.committee,
                       startDate: _filterStartDate,

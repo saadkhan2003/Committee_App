@@ -87,6 +87,22 @@ class AuthService {
     }
   }
 
+  // Check if email is verified
+  bool get isEmailVerified => currentUser?.emailVerified ?? false;
+
+  // Send email verification
+  Future<void> sendEmailVerification() async {
+    final user = currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  // Reload user to check verification status
+  Future<void> reloadUser() async {
+    await currentUser?.reload();
+  }
+
   // Handle Firebase Auth exceptions
   String _handleAuthException(FirebaseAuthException e) {
     switch (e.code) {

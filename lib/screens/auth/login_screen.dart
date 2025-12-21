@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/auth_service.dart';
 import '../../services/analytics_service.dart';
+import '../../services/toast_service.dart';
 import '../../utils/app_theme.dart';
 import '../host/host_dashboard_screen.dart';
 
@@ -61,7 +62,13 @@ class _LoginScreenState extends State<LoginScreen> {
           password: _passwordController.text,
           displayName: _nameController.text.trim(),
         );
+        // Send verification email
+        await _authService.sendEmailVerification();
         AnalyticsService.logSignUp();
+        
+        if (mounted) {
+          ToastService.success(context, 'Verification email sent! Please check your inbox.');
+        }
       }
 
       if (mounted) {
@@ -130,9 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: () async {
               final email = resetEmailController.text.trim();
               if (email.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please enter your email')),
-                );
+                ToastService.warning(context, 'Please enter your email');
                 return;
               }
               
@@ -140,20 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 await _authService.resetPassword(email);
                 if (mounted) {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Password reset email sent to $email'),
-                      backgroundColor: AppTheme.secondaryColor,
-                    ),
-                  );
+                  ToastService.success(context, 'Password reset email sent to $email');
                 }
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(e.toString()),
-                    backgroundColor: AppTheme.errorColor,
-                  ),
-                );
+                ToastService.error(context, e.toString());
               }
             },
             child: const Text('Send Reset Link'),

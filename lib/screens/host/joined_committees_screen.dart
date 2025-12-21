@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/database_service.dart';
+import '../../services/toast_service.dart';
 import '../../utils/app_theme.dart';
 import '../viewer/join_committee_screen.dart';
 import '../viewer/member_view_screen.dart';
@@ -36,23 +37,13 @@ class _JoinedCommitteesScreenState extends State<JoinedCommitteesScreen> {
 
     final committee = _dbService.getCommitteeByCode(committeeCode);
     if (committee == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Committee not found'),
-          backgroundColor: AppTheme.errorColor,
-        ),
-      );
+      ToastService.error(context, 'Committee not found');
       return;
     }
 
     final member = _dbService.getMemberByCode(committee.id, memberCode);
     if (member == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Member not found'),
-          backgroundColor: AppTheme.errorColor,
-        ),
-      );
+      ToastService.error(context, 'Member not found');
       return;
     }
 

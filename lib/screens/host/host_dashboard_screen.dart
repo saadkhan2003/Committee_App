@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -7,6 +8,7 @@ import '../../services/sync_service.dart';
 import '../../services/auto_sync_service.dart';
 import '../../services/realtime_sync_service.dart';
 import '../../services/update_service.dart';
+import '../../services/toast_service.dart';
 import '../../models/committee.dart';
 import '../../utils/app_theme.dart';
 import '../home_screen.dart';
@@ -33,6 +35,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
   List<Committee> _archivedCommittees = [];
   bool _isSyncing = false;
   late TabController _tabController;
+  Timer? _emailVerificationTimer;
 
   @override
   void initState() {
@@ -56,10 +59,30 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
         UpdateService.checkForUpdate(context);
       });
     }
+    
+    // Start email verification check timer
+    _startEmailVerificationCheck();
+  }
+
+  void _startEmailVerificationCheck() {
+    final user = _authService.currentUser;
+    if (user != null && !user.emailVerified) {
+      _emailVerificationTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+        await _authService.reloadUser();
+        if (_authService.isEmailVerified) {
+          timer.cancel();
+          if (mounted) {
+            setState(() {}); // Refresh UI to hide banner
+            ToastService.success(context, 'Email verified successfully! ✓');
+          }
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _emailVerificationTimer?.cancel();
     _realtimeSyncService.stopListening();
     _tabController.dispose();
     super.dispose();
@@ -321,12 +344,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
       await _autoSyncService.deleteCommittee(committee.id, hostId);
       _loadCommittees();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${committee.name} deleted'),
-            backgroundColor: AppTheme.errorColor,
-          ),
-        );
+        ToastService.error(context, '${committee.name} deleted');
       }
     }
   }
@@ -365,6 +383,47 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
           padding: const EdgeInsets.only(bottom: 80), // Fab space
           physics: const AlwaysScrollableScrollPhysics(), // Required for Web
           children: [
+            // Email Verification Banner
+            if (user != null && !user.emailVerified)
+              Container(
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.warningColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppTheme.warningColor.withOpacity(0.3)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.email_outlined, color: AppTheme.warningColor),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Verify your email',
+                            style: TextStyle(color: AppTheme.warningColor, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Check your inbox for verification link',
+                            style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await _authService.sendEmailVerification();
+                        if (mounted) {
+                          ToastService.success(context, 'Verification email sent!');
+                        }
+                      },
+                      child: const Text('Resend', style: TextStyle(color: AppTheme.warningColor)),
+                    ),
+                  ],
+                ),
+              ),
             // Welcome Header
             Container(
               width: double.infinity,

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../services/database_service.dart';
 import '../../services/sync_service.dart';
 import '../../services/auto_sync_service.dart';
+import '../../services/toast_service.dart';
 import '../../models/committee.dart';
 import '../../models/member.dart';
 import '../../utils/app_theme.dart';
@@ -100,14 +101,7 @@ class _ShuffleMembersScreenState extends State<ShuffleMembersScreen>
     });
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Payout order shuffled successfully!'),
-          backgroundColor: AppTheme.secondaryColor,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      );
+      ToastService.success(context, 'Payout order shuffled successfully!');
     }
   }
 
@@ -129,14 +123,7 @@ class _ShuffleMembersScreenState extends State<ShuffleMembersScreen>
     _loadMembers();
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${member.name} payout reverted'),
-          backgroundColor: AppTheme.primaryColor,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      );
+      ToastService.info(context, '${member.name} payout reverted');
     }
   }
 
