@@ -17,6 +17,7 @@ import 'committee_detail_screen.dart';
 import '../viewer/join_committee_screen.dart';
 import 'profile_screen.dart';
 import 'legal_info_screen.dart';
+import 'contact_screen.dart';
 
 class HostDashboardScreen extends StatefulWidget {
   const HostDashboardScreen({super.key});
@@ -665,10 +666,23 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
 
           const Divider(color: Colors.white10),
 
-          // About & Legal
+          // About
           ListTile(
             leading: const Icon(Icons.info_outline, color: Colors.white70),
-            title: const Text('About & Legal', style: TextStyle(color: Colors.white)),
+            title: const Text('About', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LegalInfoScreen()),
+              );
+            },
+          ),
+
+          // Terms & Conditions
+          ListTile(
+            leading: const Icon(Icons.article_outlined, color: Colors.white70),
+            title: const Text('Terms & Conditions', style: TextStyle(color: Colors.white)),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
@@ -687,6 +701,19 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LegalInfoScreen()),
+              );
+            },
+          ),
+
+          // Contact Us
+          ListTile(
+            leading: const Icon(Icons.mail_outline, color: Colors.white70),
+            title: const Text('Contact Us', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ContactScreen()),
               );
             },
           ),
