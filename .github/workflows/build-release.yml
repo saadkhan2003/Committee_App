@@ -43,7 +43,7 @@ jobs:
         run: flutter pub get
       
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --debug
       
       - name: Read release notes from version.json
         id: release_notes
@@ -56,7 +56,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: build/app/outputs/flutter-apk/app-debug.apk
           body: ${{ steps.release_notes.outputs.notes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
