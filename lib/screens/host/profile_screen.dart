@@ -20,13 +20,11 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _appVersion = '';
-  String _currentLanguage = 'en';
 
   @override
   void initState() {
     super.initState();
     _loadVersion();
-    _loadLanguage();
   }
 
   Future<void> _loadVersion() async {
@@ -36,14 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Future<void> _loadLanguage() async {
-    await LocalizationService().initialize();
-    if (mounted) {
-      setState(() {
-        _currentLanguage = LocalizationService().currentLanguage;
-      });
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('profile'.tr),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -146,8 +137,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => const SettingsScreen()),
                   );
-                  // Refresh language on return
-                  _loadLanguage();
+                   // Refresh language on return
+                   if (mounted) setState(() {});
                 },
                 icon: const Icon(Icons.settings_outlined),
                 label: Text('settings'.tr),
