@@ -1,0 +1,273 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e4e4e7;
+    line-height: 1.7;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.app-name {
+    font-size: 1.3rem;
+    color: #94a3b8;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.last-updated {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* Main Content */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+}
+
+section:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #60a5fa;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(96, 165, 250, 0.2);
+}
+
+section h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #a78bfa;
+    margin: 20px 0 12px 0;
+}
+
+section p {
+    color: #cbd5e1;
+    margin-bottom: 12px;
+}
+
+section ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 16px 0;
+}
+
+section ul li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 10px;
+    color: #cbd5e1;
+}
+
+section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    border-radius: 50%;
+}
+
+section ul li strong {
+    color: #f1f5f9;
+}
+
+/* Contact Info */
+.contact-info {
+    background: rgba(96, 165, 250, 0.1);
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin-top: 16px;
+    border-left: 4px solid #60a5fa;
+}
+
+.contact-info p {
+    margin: 0;
+}
+
+.contact-info a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.contact-info a:hover {
+    color: #93c5fd;
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 24px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 24px 16px;
+    }
+
+    header {
+        padding: 30px 20px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .app-name {
+        font-size: 1.1rem;
+    }
+
+    section {
+        padding: 24px 20px;
+    }
+
+    section h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.6rem;
+    }
+
+    section h2 {
+        font-size: 1.15rem;
+    }
+
+    section h3 {
+        font-size: 1.05rem;
+    }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection Color */
+::selection {
+    background: rgba(96, 165, 250, 0.3);
+    color: #fff;
+}
+
+/* Method Cards for Delete Account Page */
+.method-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.method-card h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.method-card ol {
+    list-style: decimal;
+    padding-left: 24px;
+    margin: 12px 0;
+}
+
+.method-card ol li {
+    padding-left: 8px;
+    margin-bottom: 8px;
+}
+
+.method-card ol li::before {
+    display: none;
+}
+
+.email-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    color: #fff !important;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none !important;
+    font-weight: 600;
+    margin: 12px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+}
+
+.email-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(96, 165, 250, 0.4);
+}
+
+.note {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+footer a {
+    color: #60a5fa;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer a:hover {
+    color: #93c5fd;
+    text-decoration: underline;
+}

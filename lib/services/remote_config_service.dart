@@ -20,7 +20,7 @@ class RemoteConfigService {
       await _remoteConfig.setDefaults({
         'min_supported_build_number': 0,
         'update_message': 'A critical update is available. Please update to continue using the app.',
-        'play_store_url': 'https://play.google.com/store/apps/details?id=com.committee.committee_app',
+        'play_store_url': 'https://play.google.com/store/apps/details?id=com.kameti.app',
       });
 
       await _remoteConfig.fetchAndActivate();

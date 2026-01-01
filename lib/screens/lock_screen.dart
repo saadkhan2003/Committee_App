@@ -133,7 +133,7 @@ class _LockScreenState extends State<LockScreen> with WidgetsBindingObserver {
                 
                 // Title
                 Text(
-                  'Committee',
+                  'Kameti',
                   style: GoogleFonts.inter(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

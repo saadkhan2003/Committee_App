@@ -7,7 +7,7 @@ import 'database_service.dart';
 
 /// Service to update the Android home screen widget with payout info
 class WidgetService {
-  static const String _appGroupId = 'com.committee.committee_app';
+  static const String _appGroupId = 'com.kameti.app';
   
   /// Update widget with next payout information
   static Future<void> updateWidget(String hostId) async {
@@ -104,7 +104,7 @@ class WidgetService {
     await HomeWidget.updateWidget(
       name: 'CommitteeWidget',
       androidName: 'CommitteeWidget',
-      qualifiedAndroidName: 'com.committee.committee_app.CommitteeWidget',
+      qualifiedAndroidName: 'com.kameti.app.CommitteeWidget',
     );
   }
   

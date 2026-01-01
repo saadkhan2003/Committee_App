@@ -25,7 +25,7 @@ class TermsScreen extends StatelessWidget {
           ),
           _buildSection(
             '2. Description of Service',
-            'Committee is a mobile application designed to help users manage rotating savings committees (ROSCA). '
+            'Kameti is a mobile application designed to help users manage rotating savings committees (ROSCA). '
             'The app allows hosts to create committees, add members, track payments, and share committee information.',
           ),
           _buildSection(

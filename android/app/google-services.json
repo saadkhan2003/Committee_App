@@ -14,13 +14,49 @@
       },
       "oauth_client": [
         {
-          "client_id": "216531343276-lat521tl3luuspr31h69d8lrvcnevv71.apps.googleusercontent.com",
+          "client_id": "216531343276-8k0i1qhg920pbt9job5v6apkqv34f4ln.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.committee.committee_app",
-            "certificate_hash": "cea4721379d298f5c8e8f4c96d7a31c668263331"
+            "certificate_hash": "52245d1e1ee1e0590bdefc27bdf8b0304674f736"
           }
         },
+        {
+          "client_id": "216531343276-hi36p4cjqbu3dhifmvon8vdritk851f0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyuYVFnF-enUcSfOge_7M40EenOwQKFqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216531343276-hi36p4cjqbu3dhifmvon8vdritk851f0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "216531343276-ror7mlr0rfs6uhrllem4vmjh3aohf0pl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.committee.committeeApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216531343276:android:9d9149ba06e4494d490c09",
+        "android_client_info": {
+          "package_name": "com.kameti.app"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "216531343276-hi36p4cjqbu3dhifmvon8vdritk851f0.apps.googleusercontent.com",
           "client_type": 3

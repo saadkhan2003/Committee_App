@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             // App Version
             Text(
-              'Committee App ${_appVersion.isEmpty ? "" : _appVersion}',
+              'Kameti ${_appVersion.isEmpty ? "" : _appVersion}',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey[600],

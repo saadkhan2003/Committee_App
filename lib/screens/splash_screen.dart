@@ -210,7 +210,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     
                     // App Name
                     const Text(
-                      'Committee',
+                      'Kameti',
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
@@ -220,7 +220,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Payment Tracker',
+                      'Committee Manager',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[400],

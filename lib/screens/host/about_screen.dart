@@ -64,7 +64,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Committee',
+                  'Kameti',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 28,
@@ -88,7 +88,7 @@ class _AboutScreenState extends State<AboutScreen> {
           // Description
           _buildSection(
             'About the App',
-            'Committee is your all-in-one solution for managing rotating savings committees (ROSCA). '
+            'Kameti is your all-in-one solution for managing rotating savings committees (ROSCA). '
             'Whether you\'re a host organizing multiple committees or a member tracking your payments, '
             'our app makes it simple to stay organized.',
           ),

@@ -19,7 +19,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
           const SizedBox(height: 20),
           _buildSection(
             'Introduction',
-            'Committee - Payment Tracker ("we", "our", or "us") respects your privacy. '
+            'Kameti - Committee Manager ("we", "our", or "us") respects your privacy. '
             'This Privacy Policy explains how we collect, use, and protect your information '
             'when you use our mobile application.',
           ),

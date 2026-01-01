@@ -45,7 +45,7 @@ class LocalizationService extends ChangeNotifier {
   static final Map<String, Map<String, String>> _translations = {
     'en': {
       // Common
-      'app_name': 'Committee',
+      'app_name': 'Kameti',
       'cancel': 'Cancel',
       'save': 'Save',
       'done': 'Done',

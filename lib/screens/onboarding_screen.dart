@@ -14,7 +14,7 @@ class OnboardingScreen extends StatelessWidget {
       globalBackgroundColor: AppTheme.darkBg,
       pages: [
         _buildPage(
-          title: 'Welcome to Committee',
+          title: 'Welcome to Kameti',
           body: 'Manage your committee payments with ease. Track collections, payouts, and member contributions all in one place.',
           icon: Icons.group_rounded,
           color: AppTheme.primaryColor,

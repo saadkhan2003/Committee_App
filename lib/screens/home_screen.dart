@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 32),
                         // App Title
                         Text(
-                          'Committee',
+                          'Kameti',
                           style: GoogleFonts.inter(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,

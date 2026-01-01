@@ -1,4 +1,4 @@
-package com.committee.committee_app
+package com.kameti.app
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider

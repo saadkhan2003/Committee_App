@@ -41,7 +41,7 @@ class _LegalInfoScreenState extends State<LegalInfoScreen> {
             icon: Icons.info_outline,
             title: 'App Information',
             children: [
-              _buildInfoRow('App Name', 'Committee - Payment Tracker'),
+              _buildInfoRow('App Name', 'Kameti - Committee Manager'),
               _buildInfoRow('Version', _version.isEmpty ? 'Loading...' : _version),
               _buildInfoRow('Category', 'Finance'),
               _buildInfoRow('Developer', 'Saad Khan'),

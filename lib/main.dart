@@ -72,7 +72,7 @@ class _CommitteeAppState extends State<CommitteeApp> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      title: 'Committee App',
+      title: 'Kameti',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
