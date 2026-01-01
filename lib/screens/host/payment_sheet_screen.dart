@@ -468,7 +468,7 @@ class _PaymentSheetScreenState extends State<PaymentSheetScreen> {
                   subtitle: Text(
                     _filterStartDate != null
                         ? DateFormat('dd/MM/yyyy').format(_filterStartDate!)
-                        : 'Committee Start',
+                        : 'Kameti Start',
                     style: const TextStyle(color: Colors.white),
                   ),
                   trailing: const Icon(Icons.calendar_today),

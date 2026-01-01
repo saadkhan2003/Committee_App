@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             children: [
                               Text(
-                                'Want to Host/Create a Committee?',
+                                'Want to Host/Create a Kameti?',
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Sign up to create and manage your own committees',
+                                'Sign up to create and manage your own kametis',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.inter(
                                   fontSize: 13,

@@ -37,7 +37,7 @@ class _JoinedCommitteesScreenState extends State<JoinedCommitteesScreen> {
 
     final committee = _dbService.getCommitteeByCode(committeeCode);
     if (committee == null) {
-      ToastService.error(context, 'Committee not found');
+      ToastService.error(context, 'Kameti not found');
       return;
     }
 

@@ -19,7 +19,7 @@ class WidgetService {
       
       if (committees.isEmpty) {
         await _setWidgetData(
-          committeeName: 'No Committees',
+          committeeName: 'No Kametis',
           memberName: 'Create a committee to see payout info',
           payoutDate: '',
           amount: '',

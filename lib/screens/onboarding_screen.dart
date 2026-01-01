@@ -20,7 +20,7 @@ class OnboardingScreen extends StatelessWidget {
           color: AppTheme.primaryColor,
         ),
         _buildPage(
-          title: 'Create Committees',
+          title: 'Create Kametis',
           body: 'Set up daily, weekly, or monthly committees. Invite members with a simple code and start tracking.',
           icon: Icons.add_circle_outline_rounded,
           color: AppTheme.secondaryColor,

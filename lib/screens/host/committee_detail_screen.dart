@@ -117,7 +117,7 @@ class _CommitteeDetailScreenState extends State<CommitteeDetailScreen> {
               TextField(
                 controller: nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Committee Name',
+                  labelText: 'Kameti Name',
                   prefixIcon: Icon(Icons.group_outlined),
                 ),
               ),
@@ -210,7 +210,7 @@ class _CommitteeDetailScreenState extends State<CommitteeDetailScreen> {
 
                   scaffoldMessenger.showSnackBar(
                     SnackBar(
-                      content: const Text('Committee deleted'),
+                      content: const Text('Kameti deleted'),
                       backgroundColor: AppTheme.secondaryColor,
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
@@ -361,7 +361,7 @@ class _CommitteeDetailScreenState extends State<CommitteeDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Committee Code',
+                              'Kameti Code',
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: Colors.white70,

@@ -96,7 +96,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
           (context) => AlertDialog(
             backgroundColor: AppTheme.darkCard,
             title: const Text('Remove from Recent'),
-            content: Text('Remove "$name" from your recent committees?'),
+            content: Text('Remove "$name" from your recent kametis?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -160,7 +160,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
       if (committee == null) {
         setState(() {
           _errorMessage =
-              'Committee not found. Please check connectivity or the code.';
+              'Kameti not found. Please check connectivity or the code.';
         });
         return;
       }
@@ -231,7 +231,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                 // Recent Committees Section
                 if (_recentCommittees.isNotEmpty) ...[
                   Text(
-                    'Recent Committees',
+                    'Recent Kametis',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -265,7 +265,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                           ),
                         ),
                         title: Text(
-                          item['name'] ?? 'Unknown Committee',
+                          item['name'] ?? 'Unknown Kameti',
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -290,7 +290,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                               onPressed:
                                   () => _showDeleteConfirmation(
                                     index,
-                                    item['name'] ?? 'this committee',
+                                    item['name'] ?? 'this kameti',
                                   ),
                               tooltip: 'Remove from recent',
                             ),
@@ -330,7 +330,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Enter the codes provided by your committee host',
+                  'Enter the codes provided by your kameti host',
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     color: Colors.grey[400],
@@ -377,7 +377,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                   keyboardType: TextInputType.number,
                   maxLength: 6,
                   decoration: const InputDecoration(
-                    labelText: 'Committee Code',
+                    labelText: 'Kameti Code',
                     prefixIcon: Icon(Icons.group_outlined),
                     hintText: 'e.g., 847293',
                     counterText: '',
@@ -471,7 +471,7 @@ class _JoinCommitteeScreenState extends State<JoinCommitteeScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '• Committee Code: Ask your committee host\n• Member Code: Your unique code given by the host',
+                        '• Kameti Code: Ask your kameti host\n• Member Code: Your unique code given by the host',
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           color: Colors.grey[500],

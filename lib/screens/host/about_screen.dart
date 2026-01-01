@@ -72,7 +72,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                 ),
                 const Text(
-                  'Payment Tracker',
+                  'Committee Manager',
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 const SizedBox(height: 8),
@@ -116,7 +116,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '© 2024 Committee App. All rights reserved.',
+                  '© 2026 Kameti. All rights reserved.',
                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 ),
               ],

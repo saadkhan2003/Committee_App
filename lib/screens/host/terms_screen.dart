@@ -19,7 +19,7 @@ class TermsScreen extends StatelessWidget {
           const SizedBox(height: 20),
           _buildSection(
             '1. Acceptance of Terms',
-            'By downloading, installing, or using Committee - Payment Tracker ("the App"), '
+            'By downloading, installing, or using Kameti - Committee Manager ("the App"), '
             'you agree to be bound by these Terms and Conditions. If you do not agree to these terms, '
             'please do not use the App.',
           ),

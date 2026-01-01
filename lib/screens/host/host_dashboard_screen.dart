@@ -195,7 +195,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                     const Icon(Icons.archive, color: AppTheme.primaryColor),
                     const SizedBox(width: 12),
                     Text(
-                      'Archived Committees',
+                      'Archived Kametis',
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -210,7 +210,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                     padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Text(
-                        'No archived committees',
+                        'No archived kametis',
                         style: TextStyle(color: Colors.grey[500]),
                       ),
                     ),
@@ -275,7 +275,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
       builder:
           (context) => AlertDialog(
             backgroundColor: AppTheme.darkCard,
-            title: const Text('Archive Committee?'),
+            title: const Text('Archive Kameti?'),
             content: Text(
               'This will move "${committee.name}" to the archived section. You can restore it later.',
             ),
@@ -321,7 +321,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
       builder:
           (context) => AlertDialog(
             backgroundColor: AppTheme.darkCard,
-            title: const Text('Delete Committee?'),
+            title: const Text('Delete Kameti?'),
             content: Text(
               'This will permanently delete "${committee.name}" and all its data. This cannot be undone.',
             ),
@@ -361,7 +361,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
       canPop: false,
       child: Scaffold(
       appBar: AppBar(
-        title: const Text('My Committees'),
+        title: const Text('My Kametis'),
         automaticallyImplyLeading: false,
         leading: Builder(
           builder: (context) => IconButton(
@@ -452,7 +452,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${_activeCommittees.length} active committees',
+                    '${_activeCommittees.length} active kametis',
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       color: Colors.white70,
@@ -506,7 +506,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Joined a Committee?',
+                                'Joined a Kameti?',
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   color: Colors.grey[400],
@@ -514,7 +514,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'View Committee Payments',
+                                'View Kameti Payments',
                                 style: GoogleFonts.inter(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -541,7 +541,7 @@ class _HostDashboardScreenState extends State<HostDashboardScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Your Hosted Committees',
+                    'Your Hosted Kametis',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

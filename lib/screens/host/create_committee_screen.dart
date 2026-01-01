@@ -136,7 +136,7 @@ class _CreateCommitteeScreenState extends State<CreateCommitteeScreen> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'Committee Created!',
+                  'Kameti Created!',
                   style: TextStyle(color: Colors.white),
                 ),
               ],
@@ -219,7 +219,7 @@ class _CreateCommitteeScreenState extends State<CreateCommitteeScreen> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Committee Name',
+                  labelText: 'Kameti Name',
                   prefixIcon: Icon(Icons.group_outlined),
                   hintText: 'e.g., Family Committee',
                 ),
