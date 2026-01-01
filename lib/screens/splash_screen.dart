@@ -220,7 +220,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Committee Manager',
+                      'Chit Fund Manager',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[400],
